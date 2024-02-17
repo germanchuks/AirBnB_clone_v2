@@ -28,8 +28,8 @@ place_amenity = Table(
 
 class Place(BaseModel, Base):
     """This class defines places"""
+    __tablename__ = 'places'
     if os.getenv('HBNB_TYPE_STORAGE') == "db":
-        __tablename__ = 'places'
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)
@@ -62,7 +62,7 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
 
-    if os.getenv('HBNB_TYPE_STORAGE') == "db":
+    if os.getenv('HBNB_TYPE_STORAGE') != "db":
         @property
         def reviews(self):
             """Returns the list of Review instances"""
