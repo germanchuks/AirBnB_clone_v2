@@ -33,20 +33,18 @@ class DBStorage:
 
     def all(self, cls=None):
         """Returns all stored models in a dictionary """
-        stored_objects = {}
-        stored_classes = (User, State, City, Amenity, Place, Review)
         if cls is None:
-            for class_name in stored_classes:
-                query = self.__session.query(class_name)
-                for obj in query.all():
-                    key = f"{obj.__class__.__name__}.{obj.id}"
-                    stored_objects[key] = obj
+            stored_obj = self.__session.query(State).all()
+            stored_obj.extend(self.__session.query(City).all())
+            stored_obj.extend(self.__session.query(User).all())
+            stored_obj.extend(self.__session.query(Place).all())
+            stored_obj.extend(self.__session.query(Review).all())
+            stored_obj.extend(self.__session.query(Amenity).all())
         else:
-            query = self.__session.query(cls)
-            for obj in query.all():
-                key = f"{obj.__class__.__name__}.{obj.id}"
-                stored_objects[key] = obj
-        return stored_objects
+            if type(cls) == str:
+                cls = eval(cls)
+            stored_obj = self.__session.query(cls)
+        return {"{}.{}".format(type(obj).__name__, obj.id): obj for obj in stored_obj}
 
     def new(self, obj):
         """Add new object to the current database session"""
