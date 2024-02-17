@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 """This module defines a class to manage data base storage for hbnb clone"""
 import os
-from models.base_model import Base
+from models.base_model import Base, BaseModel
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 from models.state import State
 from models.city import City
 from models.user import User
