@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Script to start a Flask web application."""
-from models import *
+from models.state import State
 from models import storage
 from flask import Flask, render_template
 
@@ -17,8 +17,7 @@ def teardown_appcontext(exception):
 @app.route("/states_list", strict_slashes=False)
 def states_list():
     """Displays a HTML page containing all states"""
-    states = sorted(storage.all("State").values(),
-                    key=lambda s: s.name)
+    states = storage.all(State).values()
     return render_template('7-states_list.html', states=states)
 
 
