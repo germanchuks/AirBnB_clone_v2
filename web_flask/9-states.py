@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Script to start a Flask web application."""
-from models import *
+from models.state import State
 from models import storage
 from flask import Flask, render_template
 
@@ -15,13 +15,19 @@ def teardown_appcontext(exception):
 
 
 @app.route('/states', strict_slashes=False)
-@app.route('/states/<state_id>', strict_slashes=False)
+@app.route('/states/<id>', strict_slashes=False)
 def states_id(id=None):
-    """Displays a HTML page containing all states or state with id"""
-    states = storage.all("State")
-    if state_id is not None:
-        state_id = 'State.' + state_id
-    return render_template('9-states.html', states=states, state_id=state_id)
+    """Displays a HTML page containing a state if id is provided or all states"""
+    states = storage.all(State)
+    if id:
+        key = "{}.{}".format(State, id)
+        if key in states:
+            states = states[key]
+        else:
+            states = None
+    else:
+        states = storage.all(State).values()
+    return render_template('9-states.html', states=states, id=id)
 
 
 if __name__ == "__main__":
