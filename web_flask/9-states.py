@@ -17,16 +17,11 @@ def teardown_appcontext(exception):
 @app.route('/states', strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
 def states_id(id=None):
-    """Displays a HTML page containing a state if id is provided or all states"""
+    """Displays a HTML page containing a state if id is provided
+    or all states"""
     states = storage.all(State)
-    if id:
-        key = "{}.{}".format(State, id)
-        if key in states:
-            states = states[key]
-        else:
-            states = None
-    else:
-        states = storage.all(State).values()
+    if id is not None:
+        id = 'State.' + id
     return render_template('9-states.html', states=states, id=id)
 
 
